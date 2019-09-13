@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{article.article_title}}
+{% endblock %}
+
+{% block content %}
+    <h2 class="text-center">{{ article.article_title }}</h2>
+
+    <p>{{ article.article_text }}</p>
+
+    <em>{{ article.pub_date }}</em>
+
+    {% if article.was_published_recently %}
+        <div>Новая статья!!!(В теч. 7ми дней была создана)</div>
+    {% endif %}
+
+    <hr>
+
+    {% if latest_comments_list %}
+        {% for c in latest_comments_list %}
+            <h3>{{ c.author_name }}</h3>
+            <div>{{ c.comment_text }}</div>
+        {% endfor %}
+    {% else %}
+        <div>Комментарии не найдены</div>
+    {% endif %}
+
+    <hr>
+
+    <form action="{% url 'articles:leave_comment' article.id %}" method="post">
+        {% csrf_token %}
+        <label for="name">Ваш комменитарий</label>
+        <div><input type="text" id="name" placeholder="Ваше имя" name="name" required></div><br>
+        <textarea id="name" placeholder="Текст комментария" cols="30" rows="10" name="text" required></textarea><br>
+        <input type="submit" class="btn btn-primary" value="Оставить комментарий">
+    </form>
+{% endblock %}
