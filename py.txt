@@ -1,0 +1,49 @@
+manage.py runserver
+manage.py migrate
+manage.py makemigration
+manage.py migrate
+manage.py createsuperuser	# регистрация Админки в бд
+
+
+
+
+\\ py manage.py sqlmigrate articles 0001 - для коректировки передачи даных в бд
+
+
+Для роботы с MySQLLite (встроенная ОРМ)
+	manage.py shell - запустит шелл
+	from articles.models import Article, Commment - импортирует модели
+	Article.objects.all() - выведет все новости
+	from django.utils import timezone - добавит тайм
+	a = Article(article_title = "Какая-то крутая статья", article_text = "Какой-то крутой текст...", pub_date = timezone.now()) - добавит в бд информацию
+	a.save() - сохранит в бд
+		quit() - выйдет с shell
+	a = Article.objects.get(id = 2) - при вызове а - вызовет все новости с ид = 2
+	a.was_published_recently() - вызовет все новости опубликованые за н - дней
+		a.article_title = "Как прошить PS3?"
+		a.save() 		
+
+	Article.objects.filter(article_title__startswith = "Какая") - выведет все новости с словом *Какая*
+	a.save() - что бы обновить запись в бд
+
+
+ 	from django.utils import timezone - что бы получить все статьи за текущий или прошлый год
+	current_year = timezone.now().year - для сохранение в переменну текущий год
+	Article.objects.filter(pub_date__year = current_year) - список всех новостей опубликованых в 2019 году
+	Article.objects.filter(pub_date__year = current_year - 1) - список за прошлый год
+	
+
+Article.objects.get(id = 3) - выведет исключение, так как нету новости с таким id
+	a - выведет *Как прошить PS3?*
+	a.comment_set.all() - выведет все коментарии к новостям, так как есть ForeignKey - к новостям (это внешний ключ)
+	a.comment_set.create( author_name = "John", comment_text = "Cool article") - создаст коментарий
+		a.comment_set.all() - для вывода всех сущуствующих коментаторов
+		a.comment_set.count() - для вывода количества коментариев
+		a.comment_set.filter(author_name__startswith = "J") - выведет всех, кто начинается на J
+		 cs = a.comment_set.filter(author_name__startswith = "J") - помещаем в переменную для того, что бы в дальнейшем удалить коментарии
+		 cs.delete() - удалит 1 коментарий ("Johna")
+		
+
+	
+
+	
